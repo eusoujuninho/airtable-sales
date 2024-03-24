@@ -2,7 +2,7 @@ const AirtableModel = require('./AirtableModel');
 
 class WebhookEventType extends AirtableModel {
   constructor() {
-    super('Webhooks - Tipos de eventos');
+    super('Webhooks - Transações');
   }
 
   // Define o nome do tipo de evento

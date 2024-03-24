@@ -54,6 +54,47 @@ class WebhookRequest {
     }
 
     // Adicione mais setters conforme necessário
+
+    // Getters
+    getEvent() {
+        return this.event;
+    }
+
+    getCreatedAt() {
+        return this.createdAt;
+    }
+
+    getMarketplace() {
+        return this.marketplace;
+    }
+
+    getProduct() {
+        return this.product;
+    }
+
+    getAffiliates() {
+        return this.affiliates;
+    }
+
+    getBuyer() {
+        return this.buyer;
+    }
+
+    getProducer() {
+        return this.producer;
+    }
+
+    getCommissions() {
+        return this.commissions;
+    }
+
+    getPurchase() {
+        return this.purchase;
+    }
+
+    getSubscription() {
+        return this.subscription;
+    }
 }
 
 module.exports = {

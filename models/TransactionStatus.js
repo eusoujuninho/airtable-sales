@@ -3,12 +3,6 @@ const AirtableModel = require('./AirtableModel');
 class TransactionStatus extends AirtableModel {
   constructor() {
     super('Status de Transações');
-    // Inicializa os atributos padrões para a instância
-    this.attributes = {
-      'Nome': null,
-      'Slug': null,
-      'Tipo': null
-    };
   }
 
   // Métodos para configurar os atributos
@@ -38,7 +32,10 @@ class TransactionStatus extends AirtableModel {
   }
 
   async findBySlug(slug) {
-    return await this.findBy('Slug', slug);
+    const record = await this.findBy('Slug', slug.toLowerCase());
+    this.fill(record);
+
+    return this;
   }
 
   // Salva as alterações ou cria um novo registro com os atributos atuais

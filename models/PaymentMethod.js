@@ -38,7 +38,7 @@ class PaymentMethod extends AirtableModel {
   }
 
   async findBySlug(slug) {
-    return await this.findBy('Slug', slug);
+    return await this.findBy('Slug', slug.toLowerCase());
   }
 
   async findByName(name) {

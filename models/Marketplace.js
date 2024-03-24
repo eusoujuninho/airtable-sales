@@ -36,7 +36,9 @@ async findById(id) {
   // Aqui, você pode adicionar métodos específicos para a tabela Status de Assinaturas
   // Por exemplo, encontrar um status pelo slug
   async findBySlug(slug) {
-    return await this.findBy('Slug', slug);
+    const record = await this.findBy('Slug', slug);
+    this.fill(record);
+    return this;
   }
 
   async findByName(name) {

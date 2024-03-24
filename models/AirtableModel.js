@@ -16,6 +16,10 @@ class AirtableModel extends AirtableBase {
     return this.attributes[key];
   }
 
+  getId() {
+    return this.attributes['id']
+  }
+
   fill(fields) {
     Object.keys(fields).forEach(key => {
       this.setAttribute(key, fields[key]);

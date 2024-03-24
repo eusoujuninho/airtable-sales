@@ -15,7 +15,8 @@ async function determineAdapter(platform) {
 async function handleWebhook(data) {
     const adapter = await determineAdapter(data.platform ?? 'hotmart');
     const adaptedData = await adapter.adapt(data);
-    console.log(adaptedData);
+
+    return adaptedData;
 }
 
 async function main() {

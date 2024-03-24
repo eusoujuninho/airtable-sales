@@ -77,18 +77,11 @@ class Country extends AirtableModel {
   }
 
   async findByAlpha2(alpha2) {
-    try {
-      const records = await this.base(this.tableName)
-        .select({
-          filterByFormula: `{alpha-2} = "${alpha2}"`
-        })
-        .firstPage();
-      return records.map(record => record.fields)[0];
-    } catch (error) {
-      console.error('Error finding country by alpha-2:', error);
-      return null;
-    }
+    const record = await this.findBy('alpha-2', alpha2);
+    this.fill(record);
+    return this;
   }
+
 }
 
 module.exports = Country;

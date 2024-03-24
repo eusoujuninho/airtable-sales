@@ -22,12 +22,23 @@ class AirtableBase {
         maxRecords: 1,
         view: "Grid view",
       }).firstPage();
-      return records.length > 0 ? records[0].fields : null;
+  
+      // Verifica se encontrou algum registro e retorna o id e os fields
+      if (records.length > 0) {
+        const record = records[0];
+        return {
+          id: record.id, // Inclui o ID do registro
+          ...record.fields // Espalha os campos do registro
+        };
+      } else {
+        return null;
+      }
     } catch (error) {
       console.error('Error finding record by column:', error);
       return null;
     }
   }
+  
 
   // Exemplo de método findById no modelo Marketplace
 async findById(id) {
