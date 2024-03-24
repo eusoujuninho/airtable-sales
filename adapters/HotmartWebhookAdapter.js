@@ -1,4 +1,4 @@
-const { WebhookAdapter } = require('./adapter.js');
+const { WebhookAdapter } = require('../adapters/index.js');
 const { WebhookRequest } = require('./WebhookRequest.js');
 
 class HotmartWebhookAdapter extends WebhookAdapter {

@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/node": "^18.0.6",
     "airtable": "^0.12.2",
+    "express": "^4.19.1",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {

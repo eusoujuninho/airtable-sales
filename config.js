@@ -1,5 +1,5 @@
-require('dotenv').config();
 const Airtable = require("airtable");
-const mySecret = process.env.AIRTABLE_API_KEY;
+const mySecret = process.env["AIRTABLE_API_KEY"];
+const airtableDatabase = process.env["AIRTABLE_API_DATABASE"];
 
-exports.base = new Airtable({ apiKey: mySecret }).base("appUv672Y6MZzJqtU");
+exports.base = new Airtable({ apiKey: mySecret }).base(airtableDatabase);
