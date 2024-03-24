@@ -56,8 +56,9 @@ async function handleWebhook(data) {
     const paymentMethod = await paymentMethodModel.findBySlug(purchaseMethod);
     const transactionStatus = await transactionStatusModel.findBySlug(adaptedData.getPurchase().status);
     const producer = await producerModel.findByName(adaptedData.getProducer().name);
+    const product = await productModel.findByExternalId(adaptedData.getProduct().id);
 
-    console.log(transactionStatus);
+    console.log(product);
 
 
     const address = await addressModel.create({

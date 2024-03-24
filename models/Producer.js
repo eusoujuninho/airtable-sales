@@ -23,7 +23,8 @@ class Producer extends AirtableModel {
       // Atualiza os atributos locais com os dados encontrados
       this.setNome(producerRecord.Nome);
     }
-    return producerRecord;
+    this.fill(producerRecord);
+    return this;
   }
 }
 

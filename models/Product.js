@@ -34,6 +34,12 @@ class Product extends AirtableModel {
   getLanguage() {
     return this.getAttribute('Idioma');
   }
+
+  async findByExternalId(externalId) {
+    const productRecord = await this.findBy('ID Externo', externalId);
+    this.fill(productRecord);
+    return this;
+  }
 }
 
 module.exports = Product;
