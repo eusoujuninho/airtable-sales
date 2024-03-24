@@ -1,4 +1,4 @@
-const { WebhookAdapter } = require('../adapters/index.js');
+const { WebhookAdapter } = require('./WebhookAdapter.js');
 
 class DoppusWebhookAdapter extends WebhookAdapter {
     adapt(data) {

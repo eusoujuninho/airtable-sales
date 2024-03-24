@@ -1,27 +1,26 @@
-const express = require('express');
-// Body-parser não é necessário se você estiver usando Express 4.16.0 ou superior
-const bodyParser = require('body-parser');
-const { handleWebhook } = require('../services/webhookService'); // Caminho ajustado conforme a estrutura do seu projeto
+const { HotmartWebhookAdapter, DoppusWebhookAdapter } = require("../adapters");
+const { readJsonFile } = require('../helpers/readJsonFile');
+const path = require('path'); // Certifique-se de que esta linha está presente
 
-const app = express();
-const PORT = 3000;
+async function determineAdapter(platform) {
+    const adapters = {
+        hotmart: HotmartWebhookAdapter,
+        doppus: DoppusWebhookAdapter
+    };
+    const AdapterClass = adapters[platform.toLowerCase()];
+    if (!AdapterClass) throw new Error("Plataforma desconhecida ou não suportada");
+    return new AdapterClass();
+}
 
-// Suporte para JSON e URL-encoded body
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+async function handleWebhook(data) {
+    const adapter = await determineAdapter(data.platform ?? 'hotmart');
+    const adaptedData = await adapter.adapt(data);
+    console.log(adaptedData);
+}
 
-// Rota para receber o webhook
-app.post('/webhook', async (req, res) => {
-    try {
-        console.log('Webhook recebido:', req.body);
-        await handleWebhook(req.body); // Manipula os dados recebidos
-        res.status(200).send('Webhook processado com sucesso!');
-    } catch (error) {
-        console.error('Erro ao processar o webhook:', error);
-        res.status(500).send('Erro ao processar o webhook');
-    }
-});
+async function main() {
+    const exampleData = await readJsonFile(path.join(__dirname, '../example.json'));
+    await handleWebhook(exampleData);
+}
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
+module.exports = { main, handleWebhook, determineAdapter };

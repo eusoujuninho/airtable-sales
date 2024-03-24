@@ -23,4 +23,4 @@ async function main() {
     await handleWebhook(exampleData);
 }
 
-module.exports = { main };
+module.exports = { main, handleWebhook, determineAdapter };

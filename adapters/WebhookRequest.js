@@ -55,3 +55,7 @@ class WebhookRequest {
 
     // Adicione mais setters conforme necessário
 }
+
+module.exports = {
+    WebhookRequest
+};

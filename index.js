@@ -1,9 +1,9 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { base } = require("./config");
-const { HotmartWebhookAdapter } = require("./webhooks/hotmart.js");
-const { DoppusWebhookAdapter } = require("./webhooks/doppus.js"); 
-const { readJsonFile } = require('./utils.js');
+const { HotmartWebhookAdapter } = require("./adapters/HotmartWebhookAdapter.js");
+const { DoppusWebhookAdapter } = require("./adapters/DoppusWebhookAdapter.js"); 
+const { readJsonFile } = require('./helpers/readJsonFile.js');
 
 async function determineAdapter(platform) {
     const adapters = {
