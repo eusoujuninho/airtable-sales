@@ -74,7 +74,7 @@
           "is_order_bump": true,
           "parent_purchase_transaction": "HP02316330308193"
         },
-        "order_date": "123243546",
+        "order_date": 1736337600000,
         "date_next_charge": 1736337600000,
         "status": "STARTED",
         "transaction": "HP02316330308193",

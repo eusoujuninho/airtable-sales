@@ -35,6 +35,25 @@ class HotmartWebhookAdapter extends WebhookAdapter {
         data.creation_date = data.creation_date || 0;
 
         data.data = data.data || {};
+        data.data.buyer = {
+            name: data.data.buyer.name,
+            email: data.data.buyer.email,
+            phone: data.data.buyer.checkout_phone,
+            address: {
+                address: data.data.buyer.address.address,
+                number: data.data.buyer.address.number,
+                complement: data.data.buyer.address.complement,
+                zip: data.data.buyer.address.zipcode,
+                city: {
+                    name: data.data.buyer.address.city,
+                    state: data.data.buyer.address.state,
+                },
+                country: {
+                    name: data.data.buyer.address.country,
+                    code: data.data.buyer.address.country_iso
+                }
+            }
+        }
         data.data.buyer = data.data.buyer || {};
         data.data.producer = data.data.producer || {};
         data.data.commissions = Array.isArray(data.data.commissions) ? data.data.commissions : [];
@@ -59,7 +78,7 @@ class HotmartWebhookAdapter extends WebhookAdapter {
     mapProductDetails(product) {
         return {
             id: product.id,
-            code: product.code,
+            code: product.ucode,
             name: product.name,
             has_co_production: product.has_co_production
         };
@@ -81,55 +100,53 @@ class HotmartWebhookAdapter extends WebhookAdapter {
     }
 
     mapPurchaseDetails(purchase) {
+        console.log(purchase);
+        console.log('------------');
+
         return {
             createdAt: this.convertToIsoString(purchase.order_date),
             approvedAt: this.convertToIsoString(purchase.approved_date),
-            price: {
-                full: {
-                    value: purchase.full_price?.value || 0,
-                    currency: purchase.full_price?.currency || 'N/A'
+            checkout: {
+                country: {
+                    name: purchase.checkout_country.name,
+                    iso: purchase.checkout_country.iso
                 }
             },
-            offer: this.mapOfferDetails(purchase.original_offer_price, purchase.transaction),
-            currency: purchase.price?.currency_value || 'N/A',
-            checkout: {
-                country: purchase.checkout_country?.name || 'N/A',
-                code: purchase.checkout_country?.code || 'N/A'
-            },
-            isOrderBump: purchase.order_bump?.is_order_bump || false,
             status: purchase.status,
-            transaction: this.mapTransactionDetails(purchase.transaction),
-            payment: this.mapPaymentDetails(purchase.payment)
-        };
-    }
-
-    mapOfferDetails(offer, transaction) {
-        return {
-            price: offer.value,
-            currency: offer.currency,
-            code:
-            offer.code,
-            transaction: transaction?.code || 'N/A'
-        };
-    }
-
-    mapTransactionDetails(transaction) {
-        return {
-            code: transaction.code || 'N/A',
-            parent: transaction.parent || 'N/A'
-        };
-    }
-
-    mapPaymentDetails(payment) {
-        return {
-            billet: {
-                barCode: payment.billet_barcode || 'N/A',
-                url: payment.billet_url || 'N/A'
+            transaction: {
+                code: purchase.transaction,
+                isOrderBump: purchase.order_bump?.is_order_bump || false,
+                parent: {
+                    code: purchase.order_bump.parent_purchase_transaction
+                }
             },
-            installments_number: payment.installments_number,
-            pix: this.mapPixDetails(payment.pix_code, payment.pix_expiration_date, payment.pix_qrcode),
-            refusalReason: payment.refusal_reason || 'N/A',
-            method: payment.type || 'N/A'
+            payment: this.mapPaymentDetails(purchase),
+            offer: {
+                code: purchase.offer.code,
+                original: {
+                    price: purchase.original_offer_price.value,
+                    currency: purchase.original_offer_price.currency_value
+                },
+                value: purchase.price.value,
+                currency: purchase.price.currency_value
+            }
+        };
+    }
+
+    mapPaymentDetails(purchase) {
+        return {
+            details: {
+                billet: {
+                    barCode: purchase.payment.billet_barcode || 'N/A',
+                    url: purchase.payment.billet_url || 'N/A'
+                },
+                pix: this.mapPixDetails(purchase.payment.pix_code, purchase.payment.pix_expiration_date, purchase.payment.pix_qrcode),
+                refusalReason: purchase.payment.refusal_reason || 'N/A'
+            },
+            installments_number: purchase.payment.installments_number,
+            method: purchase.payment.type || 'N/A',
+            value: purchase.full_price?.value || 0,
+            currency: purchase.full_price?.currency_value || 'N/A'
         };
     }
 
@@ -146,8 +163,10 @@ class HotmartWebhookAdapter extends WebhookAdapter {
             status: subscription.status,
             plan: this.mapPlanDetails(subscription.plan),
             code: subscription.subscriber?.code || 'N/A',
-            recurrencyNumber: subscription.recurrencyNumber || 0,
-            dateNextCharge: this.convertToIsoString(subscription.dateNextCharge),
+            recurrency: {
+                number: subscription.recurrencyNumber || 0,
+                nextCharge: this.convertToIsoString(subscription.dateNextCharge)
+            },
             anticipationPurchase: subscription.anticipationPurchase || false
         };
     }

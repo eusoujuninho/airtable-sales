@@ -34,11 +34,11 @@ async function handleWebhook(data) {
     const exampleData = await readJsonFile(path.join(__dirname, 'example.json'));
     const adaptedData = await handleWebhook(exampleData);
 
+    console.log(adaptedData);
+
     const offerData = adaptedData.purchase.offer;
     const purchaseData = adaptedData.purchase.payment;
     const purchaseMethod = purchaseData.method;
-
-    console.log(adaptedData);
 
     // Asumindo que requestMarketplace contém o slug para buscar
     const marketplaceModel = new Marketplace();
@@ -58,9 +58,6 @@ async function handleWebhook(data) {
     const producer = await producerModel.findByName(adaptedData.getProducer().name);
     const product = await productModel.findByExternalId(adaptedData.getProduct().id);
 
-    console.log(product);
-
-
     const address = await addressModel.create({
       'Endereço': adaptedData.getBuyer().address.address,
       'Número': parseInt(adaptedData.getBuyer().address.number),
@@ -70,6 +67,7 @@ async function handleWebhook(data) {
       'Estado': adaptedData.getBuyer().address.state,
       'País': [country.getId()]
     });
+
     
 
 }
