@@ -100,9 +100,6 @@ class HotmartWebhookAdapter extends WebhookAdapter {
     }
 
     mapPurchaseDetails(purchase) {
-        console.log(purchase);
-        console.log('------------');
-
         return {
             createdAt: this.convertToIsoString(purchase.order_date),
             approvedAt: this.convertToIsoString(purchase.approved_date),
